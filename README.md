@@ -12,10 +12,10 @@
 <p>
   <a href="./README_ZH.md"><img src="https://img.shields.io/badge/文档-中文-red.svg" alt="中文文档"></a>
   <a href="./README.md"><img src="https://img.shields.io/badge/Docs-English-blue.svg" alt="English Docs"></a>
-  <a href=”https://mp.weixin.qq.com/s/mW1RNem5zbAlyvLixSFWOw”><img src=”https://img.shields.io/badge/📚-Tech_Blog-purple.svg” alt=”Tech Blog”></a>
-  <a href=”https://aws.amazon.com/cn/blogs/china/programmatic-tool-calling-agent-using-bedrock-and-ecs-docker-sandbox/”><img src=”https://img.shields.io/badge/📝-AWS_Blog(PTC)-FF9900.svg” alt=”AWS Blog PTC”></a>
-  <a href=”https://aws.amazon.com/cn/blogs/china/based-on-amazon-bedrock-implement-dynamic-filtering-web-search-web-fetch/”><img src=”https://img.shields.io/badge/📝-AWS_Blog(Web_Search)-FF9900.svg” alt=”AWS Blog Web Search”></a>
-  <a href=”./cdk/DEPLOYMENT.md”><img src=”https://img.shields.io/badge/🚀-Deployment-orange.svg” alt=”Deployment Guide”></a>
+  <a href="./cdk/DEPLOYMENT.md”><img src=”https://img.shields.io/badge/🚀-Deployment-orange.svg" alt="Deployment Guide"></a>
+  <a href="https://aws.amazon.com/cn/blogs/china/programmatic-tool-calling-agent-using-bedrock-and-ecs-docker-sandbox/"><img src="https://img.shields.io/badge/📝-AWS_Blog_1-FF9900.svg" alt="AWS Blog-1 PTC"></a>
+  <a href="https://aws.amazon.com/cn/blogs/china/based-on-amazon-bedrock-implement-dynamic-filtering-web-search-web-fetch/"><img src="https://img.shields.io/badge/📝-AWS_Blog_2-FF9900.svg" alt="AWS Blog-2 Web Search"></a>
+  <a href="./cdk/DEPLOYMENT.md"><img src="https://img.shields.io/badge/🚀-Deploy_Guide-orange.svg" alt="部署指南"></a>
 </p>
 
 ---
@@ -142,7 +142,7 @@ export ANTHROPIC_BASE_URL=http://anthropic-proxy-prod-alb-xxxx.elb.amazonaws.com
 export ANTHROPIC_API_KEY=sk-xxxx
 ```
 
-###  Model Proxy Claude Agent SDK
+### Model Proxy for Claude Agent SDK
 - The same settings also applicable for Claude Agent SDK
 Eg., Dockerfile used for AgentCore Runtime [Reference Project](https://github.com/xiehust/agentcore_demo/tree/main/00-claudecode_agent) 
 
@@ -922,7 +922,7 @@ docker-compose logs -f api-proxy
 docker-compose down
 ```
 
-## Option 3. Local start
+### Option 3. Local start
 
 ### Prerequisites
 

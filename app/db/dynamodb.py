@@ -333,6 +333,7 @@ class APIKeyManager:
         cache_ttl: Optional[str] = None,
         routing_strategy: Optional[str] = None,
         compression_strategy: Optional[str] = None,
+        provider_id: Optional[str] = None,
     ) -> str:
         """
         Create a new API key.
@@ -381,6 +382,7 @@ class APIKeyManager:
             "cache_ttl": cache_ttl,
             "routing_strategy": routing_strategy or "off",
             "compression_strategy": compression_strategy or "off",
+            "provider_id": provider_id,
         }
 
         self.table.put_item(Item=item)

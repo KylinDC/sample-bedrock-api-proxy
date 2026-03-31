@@ -102,6 +102,11 @@ class BedrockService:
         self.anthropic_to_bedrock = AnthropicToBedrockConverter(dynamodb_client)
         self.bedrock_to_anthropic = BedrockToAnthropicConverter()
 
+        # Multi-provider client cache
+        self._provider_clients: Dict[str, Any] = {}
+        self._provider_clients_lock = threading.Lock()
+        self._provider_manager = None  # Lazy-loaded
+
         # Initialize OpenAI-compat service for non-Claude models if enabled
         self._openai_compat_service = None
         if settings.enable_openai_compat and settings.openai_api_key and settings.openai_base_url:
@@ -124,6 +129,88 @@ class BedrockService:
         """
         model_lower = model_id.lower()
         return "anthropic" in model_lower or "claude" in model_lower
+
+    def _get_provider_manager(self):
+        """Lazy-load ProviderManager."""
+        if self._provider_manager is None:
+            from app.db.provider_manager import ProviderManager
+            self._provider_manager = ProviderManager(
+                dynamodb_resource=self.dynamodb_client.dynamodb,
+                table_name=settings.dynamodb_providers_table,
+                encryption_secret=settings.provider_key_encryption_secret or "",
+            )
+        return self._provider_manager
+
+    def get_client(self, provider_id: Optional[str] = None):
+        """Get boto3 bedrock-runtime client for a provider.
+
+        Args:
+            provider_id: Provider ID, or None for default client.
+
+        Returns:
+            boto3 bedrock-runtime client
+        """
+        if not provider_id:
+            return self.client
+        with self._provider_clients_lock:
+            if provider_id not in self._provider_clients:
+                self._provider_clients[provider_id] = self._create_provider_client(provider_id)
+            return self._provider_clients[provider_id]
+
+    def _create_provider_client(self, provider_id: str):
+        """Create a boto3 bedrock-runtime client for a specific provider."""
+        import os
+        mgr = self._get_provider_manager()
+        provider = mgr.get_provider(provider_id)
+        if not provider or not provider.get("is_active", False):
+            raise ValueError(f"Provider {provider_id} not found or inactive")
+
+        creds = mgr.get_decrypted_credentials(provider_id)
+        region = provider.get("aws_region", settings.aws_region)
+        endpoint_url = provider.get("endpoint_url")
+
+        config = Config(
+            read_timeout=settings.bedrock_timeout,
+            connect_timeout=30,
+            retries={"max_attempts": 3, "mode": "standard"},
+        )
+
+        auth_type = provider.get("auth_type", "ak_sk")
+
+        if auth_type == "ak_sk":
+            return boto3.client(
+                "bedrock-runtime",
+                region_name=region,
+                endpoint_url=endpoint_url,
+                aws_access_key_id=creds.get("access_key_id"),
+                aws_secret_access_key=creds.get("secret_access_key"),
+                aws_session_token=creds.get("session_token"),
+                config=config,
+            )
+        elif auth_type == "bearer_token":
+            # Bearer token: set env var, create client, then restore
+            # Thread-safe via _provider_clients_lock (already held by caller)
+            old_val = os.environ.get("AWS_BEARER_TOKEN_BEDROCK")
+            try:
+                os.environ["AWS_BEARER_TOKEN_BEDROCK"] = creds["bearer_token"]
+                return boto3.client(
+                    "bedrock-runtime",
+                    region_name=region,
+                    endpoint_url=endpoint_url,
+                    config=config,
+                )
+            finally:
+                if old_val is not None:
+                    os.environ["AWS_BEARER_TOKEN_BEDROCK"] = old_val
+                else:
+                    os.environ.pop("AWS_BEARER_TOKEN_BEDROCK", None)
+
+        raise ValueError(f"Unknown auth_type: {auth_type}")
+
+    def invalidate_provider_client(self, provider_id: str):
+        """Remove a cached provider client (call when provider is updated/deleted)."""
+        with self._provider_clients_lock:
+            self._provider_clients.pop(provider_id, None)
 
     def _get_bedrock_model_id(self, anthropic_model_id: str) -> str:
         """

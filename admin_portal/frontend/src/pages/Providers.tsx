@@ -410,7 +410,9 @@ export default function Providers() {
                 </tr>
               ) : (
                 data?.items.map((provider) => {
-                  const testResult = testResults[provider.provider_id];
+                  const testResultRaw = testResults[provider.provider_id];
+                  const isTestLoading = testResultRaw === 'loading';
+                  const testResult = isTestLoading ? null : testResultRaw;
                   return (
                     <tr
                       key={provider.provider_id}
@@ -471,30 +473,30 @@ export default function Providers() {
                           {/* Test Connection */}
                           <button
                             onClick={() => handleTest(provider.provider_id)}
-                            disabled={testResult === 'loading'}
+                            disabled={isTestLoading}
                             className={`p-2 rounded-lg transition-colors ${
-                              testResult === 'loading'
+                              isTestLoading
                                 ? 'text-slate-500'
-                                : testResult && testResult !== 'loading' && testResult.status === 'ok'
+                                : testResult?.status === 'ok'
                                 ? 'text-emerald-400 bg-emerald-500/10'
-                                : testResult && testResult !== 'loading' && testResult.status === 'error'
+                                : testResult?.status === 'error'
                                 ? 'text-red-400 bg-red-500/10'
                                 : 'text-slate-400 hover:text-white hover:bg-border-dark'
                             }`}
                             title={
-                              testResult === 'loading'
+                              isTestLoading
                                 ? 'Testing...'
-                                : testResult && testResult !== 'loading'
+                                : testResult
                                 ? testResult.message
                                 : 'Test connection'
                             }
                           >
                             <span className="material-symbols-outlined text-[20px]">
-                              {testResult === 'loading'
+                              {isTestLoading
                                 ? 'progress_activity'
-                                : testResult && testResult !== 'loading' && testResult.status === 'ok'
+                                : testResult?.status === 'ok'
                                 ? 'check_circle'
-                                : testResult && testResult !== 'loading' && testResult.status === 'error'
+                                : testResult?.status === 'error'
                                 ? 'error'
                                 : 'network_check'}
                             </span>

@@ -74,6 +74,7 @@
     "modelMapping": "Model Mapping",
     "models": "Models",
     "logs": "Logs",
+    "providers": "Providers",
     "settings": "Settings",
     "logout": "Logout"
   },
@@ -132,8 +133,10 @@
       "tpmLimit": "TPM Limit",
       "rateLimit": "Rate Limit",
       "serviceTier": "Service Tier",
-      "cacheTtl": "Cache TTL"
+      "cacheTtl": "Cache TTL",
+      "provider": "Provider"
     },
+    "providerDefault": "Default",
     "roles": {
       "admin": "Admin",
       "writeOnly": "Write Only",
@@ -241,6 +244,56 @@
     "mappingDeleted": "Model mapping deleted successfully",
     "cannotEditDefault": "Default mappings cannot be edited. Create a custom override instead.",
     "cannotDeleteDefault": "Default mappings cannot be deleted."
+  },
+  "providers": {
+    "title": "Providers",
+    "subtitle": "Manage Bedrock account providers for multi-account routing",
+    "addProvider": "Add Provider",
+    "totalProviders": "Total Providers",
+    "active": "Active",
+    "inactive": "Inactive",
+    "noProviders": "No providers configured. Add a provider to get started.",
+    "showingProviders": "Showing {{current}} of {{total}} providers",
+    "failedToLoad": "Failed to load providers",
+    "table": {
+      "name": "Name",
+      "region": "Region",
+      "authType": "Auth Type",
+      "credentials": "Credentials",
+      "apiKeys": "API Keys",
+      "bearerToken": "Bearer Token",
+      "akSk": "AK/SK"
+    },
+    "form": {
+      "createTitle": "Add Provider",
+      "editTitle": "Edit Provider",
+      "name": "Name",
+      "namePlaceholder": "e.g. Production US East",
+      "awsRegion": "AWS Region",
+      "authType": "Auth Type",
+      "bearerTokenOption": "Bearer Token",
+      "akSkOption": "Access Key / Secret Key",
+      "bearerToken": "Bearer Token",
+      "accessKeyId": "Access Key ID",
+      "secretAccessKey": "Secret Access Key",
+      "sessionToken": "Session Token (optional)",
+      "endpointUrl": "Endpoint URL (optional)",
+      "endpointUrlHint": "Custom Bedrock endpoint URL. Leave blank to use the default endpoint for the region.",
+      "keepCurrent": " (leave blank to keep current)",
+      "enterBearerToken": "Enter bearer token",
+      "enterSecretAccessKey": "Enter secret access key",
+      "enterSessionToken": "Enter session token (optional)"
+    },
+    "actions": {
+      "testConnection": "Test connection",
+      "testing": "Testing...",
+      "editProvider": "Edit provider",
+      "deleteProvider": "Delete provider",
+      "clickToDeactivate": "Click to deactivate",
+      "clickToActivate": "Click to activate"
+    },
+    "confirmDelete": "Are you sure you want to delete this provider? This action cannot be undone.",
+    "testFailed": "Test failed"
   },
   "language": {
     "select": "Language",

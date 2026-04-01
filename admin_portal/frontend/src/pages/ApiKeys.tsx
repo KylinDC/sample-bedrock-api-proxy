@@ -203,13 +203,13 @@ function ApiKeyForm({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-slate-300 mb-1">Provider</label>
+        <label className="block text-sm font-medium text-slate-300 mb-1">{t('apiKeys.form.provider')}</label>
         <select
           value={formData.provider_id}
           onChange={(e) => setFormData({ ...formData, provider_id: e.target.value })}
           className="w-full px-3 py-2 bg-input-bg border border-border-dark rounded-lg text-white focus:border-primary focus:ring-1 focus:ring-primary"
         >
-          <option value="">Default (Environment Config)</option>
+          <option value="">{t('apiKeys.providerDefault')}</option>
           {providersData?.items
             ?.filter((p) => p.is_active)
             .map((p) => (
@@ -603,7 +603,7 @@ export default function ApiKeys() {
                   {t('apiKeys.form.cacheTtl')}
                 </th>
                 <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider hidden lg:table-cell">
-                  Provider
+                  {t('apiKeys.form.provider')}
                 </th>
                 <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">
                   {t('common.status')}
@@ -813,7 +813,7 @@ export default function ApiKeys() {
                             {providersData?.items.find(p => p.provider_id === key.provider_id)?.name || key.provider_id}
                           </span>
                         ) : (
-                          <span className="text-xs text-slate-500">Default</span>
+                          <span className="text-xs text-slate-500">{t('apiKeys.providerDefault')}</span>
                         )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">

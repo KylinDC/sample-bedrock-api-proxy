@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   useProviders,
   useCreateProvider,
@@ -55,6 +56,7 @@ function ProviderForm({
   onCancel: () => void;
   isLoading: boolean;
 }) {
+  const { t } = useTranslation();
   const isEdit = !!initialData;
 
   const [formData, setFormData] = useState({
@@ -114,19 +116,19 @@ function ProviderForm({
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div>
-        <label className="block text-sm font-medium text-slate-300 mb-1">Name</label>
+        <label className="block text-sm font-medium text-slate-300 mb-1">{t('providers.form.name')}</label>
         <input
           type="text"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           className="w-full px-3 py-2 bg-input-bg border border-border-dark rounded-lg text-white focus:border-primary focus:ring-1 focus:ring-primary"
-          placeholder="e.g. Production US East"
+          placeholder={t('providers.form.namePlaceholder')}
           required
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-slate-300 mb-1">AWS Region</label>
+        <label className="block text-sm font-medium text-slate-300 mb-1">{t('providers.form.awsRegion')}</label>
         <input
           type="text"
           value={formData.aws_region}
@@ -138,7 +140,7 @@ function ProviderForm({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-slate-300 mb-1">Auth Type</label>
+        <label className="block text-sm font-medium text-slate-300 mb-1">{t('providers.form.authType')}</label>
         <select
           value={formData.auth_type}
           onChange={(e) =>
@@ -146,8 +148,8 @@ function ProviderForm({
           }
           className="w-full px-3 py-2 bg-input-bg border border-border-dark rounded-lg text-white focus:border-primary focus:ring-1 focus:ring-primary"
         >
-          <option value="bearer_token">Bearer Token</option>
-          <option value="ak_sk">Access Key / Secret Key</option>
+          <option value="bearer_token">{t('providers.form.bearerTokenOption')}</option>
+          <option value="ak_sk">{t('providers.form.akSkOption')}</option>
         </select>
       </div>
 
@@ -155,14 +157,14 @@ function ProviderForm({
       {formData.auth_type === 'bearer_token' ? (
         <div>
           <label className="block text-sm font-medium text-slate-300 mb-1">
-            Bearer Token{isEdit ? ' (leave blank to keep current)' : ''}
+            {t('providers.form.bearerToken')}{isEdit ? t('providers.form.keepCurrent') : ''}
           </label>
           <input
             type="password"
             value={formData.bearer_token}
             onChange={(e) => setFormData({ ...formData, bearer_token: e.target.value })}
             className="w-full px-3 py-2 bg-input-bg border border-border-dark rounded-lg text-white focus:border-primary focus:ring-1 focus:ring-primary"
-            placeholder={isEdit ? '********' : 'Enter bearer token'}
+            placeholder={isEdit ? '********' : t('providers.form.enterBearerToken')}
             required={!isEdit}
           />
         </div>
@@ -170,7 +172,7 @@ function ProviderForm({
         <>
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-1">
-              Access Key ID{isEdit ? ' (leave blank to keep current)' : ''}
+              {t('providers.form.accessKeyId')}{isEdit ? t('providers.form.keepCurrent') : ''}
             </label>
             <input
               type="text"
@@ -183,27 +185,27 @@ function ProviderForm({
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-1">
-              Secret Access Key{isEdit ? ' (leave blank to keep current)' : ''}
+              {t('providers.form.secretAccessKey')}{isEdit ? t('providers.form.keepCurrent') : ''}
             </label>
             <input
               type="password"
               value={formData.secret_access_key}
               onChange={(e) => setFormData({ ...formData, secret_access_key: e.target.value })}
               className="w-full px-3 py-2 bg-input-bg border border-border-dark rounded-lg text-white focus:border-primary focus:ring-1 focus:ring-primary"
-              placeholder={isEdit ? '********' : 'Enter secret access key'}
+              placeholder={isEdit ? '********' : t('providers.form.enterSecretAccessKey')}
               required={!isEdit}
             />
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-1">
-              Session Token (optional)
+              {t('providers.form.sessionToken')}
             </label>
             <input
               type="password"
               value={formData.session_token}
               onChange={(e) => setFormData({ ...formData, session_token: e.target.value })}
               className="w-full px-3 py-2 bg-input-bg border border-border-dark rounded-lg text-white focus:border-primary focus:ring-1 focus:ring-primary"
-              placeholder={isEdit ? '********' : 'Enter session token (optional)'}
+              placeholder={isEdit ? '********' : t('providers.form.enterSessionToken')}
             />
           </div>
         </>
@@ -211,7 +213,7 @@ function ProviderForm({
 
       <div>
         <label className="block text-sm font-medium text-slate-300 mb-1">
-          Endpoint URL (optional)
+          {t('providers.form.endpointUrl')}
         </label>
         <input
           type="text"
@@ -221,7 +223,7 @@ function ProviderForm({
           placeholder="https://bedrock-runtime.us-east-1.amazonaws.com"
         />
         <p className="mt-1 text-xs text-slate-500">
-          Custom Bedrock endpoint URL. Leave blank to use the default endpoint for the region.
+          {t('providers.form.endpointUrlHint')}
         </p>
       </div>
 
@@ -231,14 +233,14 @@ function ProviderForm({
           onClick={onCancel}
           className="flex-1 px-4 py-2 border border-border-dark rounded-lg text-slate-300 hover:bg-surface-dark transition-colors"
         >
-          Cancel
+          {t('common.cancel')}
         </button>
         <button
           type="submit"
           disabled={isLoading}
           className="flex-1 px-4 py-2 bg-primary hover:bg-blue-600 text-white rounded-lg font-medium transition-colors disabled:opacity-50"
         >
-          {isLoading ? 'Saving...' : 'Save'}
+          {isLoading ? t('common.loading') : t('common.save')}
         </button>
       </div>
     </form>
@@ -246,6 +248,7 @@ function ProviderForm({
 }
 
 export default function Providers() {
+  const { t } = useTranslation();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingProvider, setEditingProvider] = useState<Provider | null>(null);
   const [testResults, setTestResults] = useState<Record<string, ProviderTestResult | 'loading'>>({});
@@ -272,7 +275,7 @@ export default function Providers() {
   };
 
   const handleDelete = async (providerId: string) => {
-    if (confirm('Are you sure you want to delete this provider? This action cannot be undone.')) {
+    if (confirm(t('providers.confirmDelete'))) {
       await deleteMutation.mutateAsync(providerId);
     }
   };
@@ -292,7 +295,7 @@ export default function Providers() {
     } catch (err) {
       setTestResults((prev) => ({
         ...prev,
-        [providerId]: { status: 'error', message: err instanceof Error ? err.message : 'Test failed' },
+        [providerId]: { status: 'error', message: err instanceof Error ? err.message : t('providers.testFailed') },
       }));
     }
     // Clear result after 5 seconds
@@ -310,7 +313,7 @@ export default function Providers() {
       <div className="flex items-center justify-center h-64">
         <div className="text-center text-red-400">
           <span className="material-symbols-outlined text-4xl mb-2">error</span>
-          <p>Failed to load providers</p>
+          <p>{t('providers.failedToLoad')}</p>
         </div>
       </div>
     );
@@ -321,9 +324,9 @@ export default function Providers() {
       {/* Page Heading */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div className="flex flex-col gap-2">
-          <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">Providers</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">{t('providers.title')}</h1>
           <p className="text-slate-400 text-base">
-            Manage Bedrock account providers for multi-account routing
+            {t('providers.subtitle')}
           </p>
         </div>
         <button
@@ -331,7 +334,7 @@ export default function Providers() {
           className="flex items-center justify-center gap-2 h-10 px-4 rounded-lg bg-primary text-white text-sm font-bold shadow-lg shadow-primary/25 hover:bg-primary/90 transition-all"
         >
           <span className="material-symbols-outlined text-[20px]">add</span>
-          Add Provider
+          {t('providers.addProvider')}
         </button>
       </div>
 
@@ -339,14 +342,14 @@ export default function Providers() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-surface-dark border border-border-dark rounded-xl p-5 flex flex-col gap-1 shadow-sm">
           <div className="flex items-center justify-between">
-            <span className="text-slate-400 text-sm font-medium">Total Providers</span>
+            <span className="text-slate-400 text-sm font-medium">{t('providers.totalProviders')}</span>
             <span className="material-symbols-outlined text-primary">cloud</span>
           </div>
           <span className="text-2xl font-bold text-white mt-2">{data?.count || 0}</span>
         </div>
         <div className="bg-surface-dark border border-border-dark rounded-xl p-5 flex flex-col gap-1 shadow-sm">
           <div className="flex items-center justify-between">
-            <span className="text-slate-400 text-sm font-medium">Active</span>
+            <span className="text-slate-400 text-sm font-medium">{t('providers.active')}</span>
             <span className="material-symbols-outlined text-emerald-500">check_circle</span>
           </div>
           <span className="text-2xl font-bold text-white mt-2">
@@ -355,7 +358,7 @@ export default function Providers() {
         </div>
         <div className="bg-surface-dark border border-border-dark rounded-xl p-5 flex flex-col gap-1 shadow-sm">
           <div className="flex items-center justify-between">
-            <span className="text-slate-400 text-sm font-medium">Inactive</span>
+            <span className="text-slate-400 text-sm font-medium">{t('providers.inactive')}</span>
             <span className="material-symbols-outlined text-slate-500">cancel</span>
           </div>
           <span className="text-2xl font-bold text-white mt-2">
@@ -371,25 +374,25 @@ export default function Providers() {
             <thead className="bg-[#151b28] border-b border-border-dark">
               <tr>
                 <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  Name
+                  {t('providers.table.name')}
                 </th>
                 <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  Region
+                  {t('providers.table.region')}
                 </th>
                 <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  Auth Type
+                  {t('providers.table.authType')}
                 </th>
                 <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  Credentials
+                  {t('providers.table.credentials')}
                 </th>
                 <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  Status
+                  {t('common.status')}
                 </th>
                 <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  API Keys
+                  {t('providers.table.apiKeys')}
                 </th>
                 <th className="px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider text-right">
-                  Actions
+                  {t('common.actions')}
                 </th>
               </tr>
             </thead>
@@ -405,7 +408,7 @@ export default function Providers() {
               ) : data?.items.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="px-6 py-12 text-center text-slate-400">
-                    No providers configured. Add a provider to get started.
+                    {t('providers.noProviders')}
                   </td>
                 </tr>
               ) : (
@@ -439,7 +442,7 @@ export default function Providers() {
                               : 'bg-cyan-900/30 text-cyan-400 border border-cyan-800'
                           }`}
                         >
-                          {provider.auth_type === 'bearer_token' ? 'Bearer Token' : 'AK/SK'}
+                          {provider.auth_type === 'bearer_token' ? t('providers.table.bearerToken') : t('providers.table.akSk')}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -455,14 +458,14 @@ export default function Providers() {
                               ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20 hover:bg-emerald-500/20'
                               : 'bg-slate-100 dark:bg-border-dark text-slate-500 border-slate-200 dark:border-slate-700 hover:bg-slate-600/20'
                           }`}
-                          title={provider.is_active ? 'Click to deactivate' : 'Click to activate'}
+                          title={provider.is_active ? t('providers.actions.clickToDeactivate') : t('providers.actions.clickToActivate')}
                         >
                           <span
                             className={`size-1.5 rounded-full ${
                               provider.is_active ? 'bg-emerald-500' : 'bg-slate-500'
                             }`}
                           ></span>
-                          {provider.is_active ? 'Active' : 'Inactive'}
+                          {provider.is_active ? t('common.active') : t('common.inactive')}
                         </button>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -485,10 +488,10 @@ export default function Providers() {
                             }`}
                             title={
                               isTestLoading
-                                ? 'Testing...'
+                                ? t('providers.actions.testing')
                                 : testResult
                                 ? testResult.message
-                                : 'Test connection'
+                                : t('providers.actions.testConnection')
                             }
                           >
                             <span className="material-symbols-outlined text-[20px]">
@@ -505,7 +508,7 @@ export default function Providers() {
                           <button
                             onClick={() => setEditingProvider(provider)}
                             className="p-2 text-slate-400 hover:text-white hover:bg-border-dark rounded-lg transition-colors"
-                            title="Edit provider"
+                            title={t('providers.actions.editProvider')}
                           >
                             <span className="material-symbols-outlined text-[20px]">edit</span>
                           </button>
@@ -513,7 +516,7 @@ export default function Providers() {
                           <button
                             onClick={() => handleDelete(provider.provider_id)}
                             className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
-                            title="Delete provider"
+                            title={t('providers.actions.deleteProvider')}
                           >
                             <span className="material-symbols-outlined text-[20px]">delete</span>
                           </button>
@@ -530,7 +533,7 @@ export default function Providers() {
         {/* Footer */}
         <div className="flex items-center justify-between px-6 py-4 border-t border-border-dark bg-[#151b28]">
           <span className="text-sm text-slate-400">
-            Showing {data?.items.length || 0} of {data?.count || 0} providers
+            {t('providers.showingProviders', { current: data?.items.length || 0, total: data?.count || 0 })}
           </span>
         </div>
       </div>
@@ -539,7 +542,7 @@ export default function Providers() {
       <Modal
         isOpen={showCreateModal}
         onClose={() => setShowCreateModal(false)}
-        title="Add Provider"
+        title={t('providers.form.createTitle')}
       >
         <ProviderForm
           onSubmit={handleCreate}
@@ -552,7 +555,7 @@ export default function Providers() {
       <Modal
         isOpen={!!editingProvider}
         onClose={() => setEditingProvider(null)}
-        title="Edit Provider"
+        title={t('providers.form.editTitle')}
       >
         {editingProvider && (
           <ProviderForm

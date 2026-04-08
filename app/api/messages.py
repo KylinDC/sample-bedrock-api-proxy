@@ -294,8 +294,11 @@ async def create_message(
     """
     request_id = f"msg-{uuid4().hex}"
 
+    # Normalize to empty dict so downstream .get() calls work when REQUIRE_API_KEY=False
+    api_key_info = api_key_info or {}
+
     # Extract provider_id from API key info for multi-provider Bedrock routing
-    provider_id = api_key_info.get("provider_id") if api_key_info else None
+    provider_id = api_key_info.get("provider_id")
 
     # Get container ID from request body for session reuse (plain string)
     container_id = request_data.container
@@ -1286,7 +1289,8 @@ async def _handle_streaming_request(
     accumulated_tokens = {"input": 0, "output": 0, "cached": 0, "cache_write": 0}
     success = True
     error_message = None
-    provider_id = api_key_info.get("provider_id") if api_key_info else None
+    api_key_info = api_key_info or {}
+    provider_id = api_key_info.get("provider_id")
 
     print(f"[STREAMING] Starting stream for request {request_id}")
     print(f"[STREAMING] Service tier: {service_tier}")

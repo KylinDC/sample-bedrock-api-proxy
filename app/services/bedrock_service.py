@@ -82,7 +82,9 @@ class BedrockService:
             connect_timeout=30,
             retries={"max_attempts": 3, "mode": "standard"},
         )
-        # print(f"-------settings--------:\n{settings}")
+        if settings.aws_bearer_token_bedrock:
+            import os
+            os.environ["AWS_BEARER_TOKEN_BEDROCK"] = settings.aws_bearer_token_bedrock
         self.client = boto3.client(
             "bedrock-runtime",
             region_name=settings.aws_region,

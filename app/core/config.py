@@ -57,6 +57,10 @@ class Settings(BaseSettings):
         default=None, alias="AWS_SECRET_ACCESS_KEY"
     )
     aws_session_token: Optional[str] = Field(default=None, alias="AWS_SESSION_TOKEN")
+    aws_bearer_token_bedrock: Optional[str] = Field(
+        default=None, alias="AWS_BEARER_TOKEN_BEDROCK",
+        description="Bearer token for Bedrock authentication (alternative to AK/SK)"
+    )
     bedrock_endpoint_url: Optional[str] = Field(
         default=None, alias="BEDROCK_ENDPOINT_URL"
     )

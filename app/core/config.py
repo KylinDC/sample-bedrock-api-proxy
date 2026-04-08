@@ -88,6 +88,11 @@ class Settings(BaseSettings):
         alias="USAGE_TTL_DAYS",
         description="TTL in days for usage records in DynamoDB (0 to disable TTL)"
     )
+    enable_usage_tracking: bool = Field(
+        default=True,
+        alias="ENABLE_USAGE_TRACKING",
+        description="When False, skip writing usage records to DynamoDB. Useful for local dev without DynamoDB."
+    )
 
     # Authentication Settings
     api_key_header: str = Field(default="x-api-key", alias="API_KEY_HEADER")

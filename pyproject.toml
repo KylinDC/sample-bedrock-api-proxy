@@ -106,6 +106,14 @@ constraint-dependencies = [
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[dependency-groups]
+dev = [
+    "moto>=5.1.22",
+    "pytest>=8.4.2",
+    "pytest-asyncio>=0.26.0",
+    "pytest-cov>=7.1.0",
+]
+
 [tool.hatch.build.targets.wheel]
 packages = ["app"]
 

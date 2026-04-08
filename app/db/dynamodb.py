@@ -897,6 +897,9 @@ class UsageTracker:
             metadata: Optional metadata
             cache_ttl: Effective cache TTL used ("5m" or "1h"), for billing differentiation
         """
+        if not settings.enable_usage_tracking:
+            return
+
         # Use string timestamp to match CDK table schema (STRING type)
         current_time = int(time.time())
         timestamp = str(current_time * 1000)  # milliseconds as string

@@ -37,6 +37,10 @@ class BetaHeaderConfigCache:
 
     def start(self):
         """Load data and start periodic refresh."""
+        if not settings.enable_beta_header_dynamo:
+            self._load_defaults()
+            return
+
         from app.db.dynamodb import DynamoDBClient, BetaHeaderManager
         self._manager = BetaHeaderManager(DynamoDBClient())
         self._refresh()

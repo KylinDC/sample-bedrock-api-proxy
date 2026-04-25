@@ -100,6 +100,11 @@ class Settings(BaseSettings):
         alias="ENABLE_USAGE_TRACKING",
         description="When False, skip writing usage records to DynamoDB. Useful for local dev without DynamoDB."
     )
+    enable_beta_header_dynamo: bool = Field(
+        default=True,
+        alias="ENABLE_BETA_HEADER_DYNAMO",
+        description="When False, load beta header config from config.py defaults only, skipping DynamoDB lookup and the periodic refresh timer."
+    )
 
     # Authentication Settings
     api_key_header: str = Field(default="x-api-key", alias="API_KEY_HEADER")

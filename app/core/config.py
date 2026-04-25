@@ -101,7 +101,7 @@ class Settings(BaseSettings):
         description="When False, skip writing usage records to DynamoDB. Useful for local dev without DynamoDB."
     )
     enable_beta_header_dynamo: bool = Field(
-        default=True,
+        default=False,
         alias="ENABLE_BETA_HEADER_DYNAMO",
         description="When False, load beta header config from config.py defaults only, skipping DynamoDB lookup and the periodic refresh timer."
     )
